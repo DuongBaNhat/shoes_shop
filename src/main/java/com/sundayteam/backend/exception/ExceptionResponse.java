@@ -1,5 +1,6 @@
 package com.sundayteam.backend.exception;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 @Getter
