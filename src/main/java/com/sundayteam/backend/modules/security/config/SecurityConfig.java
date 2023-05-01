@@ -1,5 +1,6 @@
 package com.sundayteam.backend.modules.security.config;
 
+import com.sundayteam.backend.exception.JwtAuthenticationEntryPoint;
 import com.sundayteam.backend.modules.security.model.jwt.BearerTokenFilter;
 import com.sundayteam.backend.modules.security.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -15,7 +16,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
 import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 
@@ -56,7 +60,14 @@ public class SecurityConfig {
     }
 
     @Bean
+    AuthenticationEntryPoint authenticationEntryPoint() {
+        return new JwtAuthenticationEntryPoint();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        // http.exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler());
+
         http
                 .cors()
                 .disable()
@@ -77,6 +88,9 @@ public class SecurityConfig {
                 .permitAll()
                 .anyRequest()
                 .authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint(authenticationEntryPoint())
                 .and()
                 .logout(logout -> logout
                         .addLogoutHandler(new SecurityContextLogoutHandler())
