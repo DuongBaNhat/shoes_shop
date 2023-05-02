@@ -1,12 +1,10 @@
-package com.sundayteam.backend.exception;
+package com.sundayteam.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
-@RequiredArgsConstructor
 public class ExceptionResponse {
     @NonNull
     private int statusCode;
@@ -15,3 +13,4 @@ public class ExceptionResponse {
     private String message;
     private Object exp;
 }
+
