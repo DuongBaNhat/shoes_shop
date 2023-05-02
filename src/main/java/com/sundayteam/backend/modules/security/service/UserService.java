@@ -1,5 +1,7 @@
 package com.sundayteam.backend.modules.security.service;
 
+import com.sundayteam.backend.exception.ResourceConflictException;
+import com.sundayteam.backend.model.DataResponse;
 import com.sundayteam.backend.modules.security.entity.UserEntity;
 import com.sundayteam.backend.modules.security.model.jwt.JwtAuthenticationProvider;
 import com.sundayteam.backend.modules.security.model.request.LoginRequest;
@@ -36,7 +38,7 @@ public class UserService {
 
     public UserEntity register(RegisterRequest user) {
         if (userRepository.findByUsername(user.getUsername()) != null) {
-            throw new RuntimeException("username already existed");
+            throw new ResourceConflictException("username already existed");
         }
         UserEntity newUser = UserEntity.builder()
                 .username(user.getUsername())

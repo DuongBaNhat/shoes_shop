@@ -1,5 +1,7 @@
 package com.sundayteam.backend.modules.security.controller;
 
+import com.sundayteam.backend.annotation.Auth;
+import com.sundayteam.backend.model.DataResponse;
 import com.sundayteam.backend.modules.security.entity.UserEntity;
 import com.sundayteam.backend.modules.security.model.request.LoginRequest;
 import com.sundayteam.backend.modules.security.model.request.RegisterRequest;
@@ -10,6 +12,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirements;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,14 +30,14 @@ public class UserController {
 
     @SecurityRequirements
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
-        return ResponseEntity.ok(userService.login(request));
+    public Object login(@Valid @RequestBody LoginRequest request) {
+        return new DataResponse(userService.login(request));
     }
 
     @SecurityRequirements
     @PostMapping("/register")
-    public ResponseEntity<UserEntity> register(@Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(userService.register(request));
+    public Object register(@Valid @RequestBody RegisterRequest request) {
+        return new DataResponse(userService.register(request));
     }
 
     @GetMapping("/list")
